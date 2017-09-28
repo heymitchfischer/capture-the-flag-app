@@ -1,3 +1,15 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  get '/' => 'flags#index'
+  get '/flags' => 'flags#index'
+
+  get '/users' => 'users#index'
+  get '/signup' => 'users#new'
+  post '/users' => 'users#create'
+  get '/users/:id' => 'users#show'
+
+  get '/login' => 'sessions#new'
+  post '/login' => 'sessions#create'
+  delete '/logout' => 'sessions#destroy'
+
+  get '/teams' => 'teams#index'
 end

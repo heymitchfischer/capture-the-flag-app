@@ -9,6 +9,16 @@
   </head>
 
   <body>
+    <% if current_user %>
+      <h3>The nav bar is on the left and has the following options:
+        <ul>
+          <li><a href="/flags">Capture the Flag</a></li>
+          <li><a href="/users/<%= current_user.id %>">User</a></li>
+          <li>Team</li>
+          <li><a href="/users">Stats</a></li>
+        </ul>
+      </h3>
+    <% end %>
     <%= yield %>
   </body>
 </html>

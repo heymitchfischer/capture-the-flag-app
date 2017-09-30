@@ -12,4 +12,7 @@ Rails.application.routes.draw do
   delete '/logout' => 'sessions#destroy'
 
   get '/teams' => 'teams#index'
+  get '/teams/:id' => 'teams#show'
+
+  post '/messages' => 'messages#create'
 end

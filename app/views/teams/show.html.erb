@@ -1,0 +1,21 @@
+<h1>Your Team: <%= @team.name %></h1>
+<h3>Flags: <%= @team.flags %></h3>
+
+<img src="<%= @team.image %>">
+
+<%= form_tag "/messages", method: :post do %>
+  <div>
+    <input type="text" name="text">
+  </div>
+  <input type="submit" value="Post Message">
+<% end %>
+
+<h2>Messages and Updates:</h2>
+<% @team.messages.each do |message| %>
+  <div>
+    <h4><b><%= message.user.name %></b> at <%= message.created_at %></h4>
+    <p><%= message.text %></p>
+  </div>
+  <br>
+<% end %>
+

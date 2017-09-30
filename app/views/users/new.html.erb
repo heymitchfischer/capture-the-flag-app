@@ -13,5 +13,12 @@
   <div>
     Confirm Password: <input type="password" name="password_confirmation">
   </div>
+  <div>
+    Select Team: <select name="team_id">
+      <% @teams.each do |team| %>
+        <option value="<%= team.id %>" name="team_id"><%= team.name %></option>
+      <% end %>
+    </select>
+  </div>
   <input type="submit" value="Create Account">
 <% end %>

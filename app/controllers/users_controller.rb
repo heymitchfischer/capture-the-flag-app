@@ -6,7 +6,7 @@ class UsersController < ApplicationController
   end
 
   def new
-    
+    @teams = Team.all
   end
 
   def create
@@ -14,7 +14,8 @@ class UsersController < ApplicationController
                     name: params[:name],
                     email: params[:email],
                     password: params[:password],
-                    password_confirmation: params[:password_confirmation]
+                    password_confirmation: params[:password_confirmation],
+                    team_id: params[:team_id]
                     )
     if user.save
       session[:user_id] = user.id

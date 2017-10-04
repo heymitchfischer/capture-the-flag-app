@@ -8,6 +8,9 @@ class Base < ApplicationRecord
   after_validation :reverse_geocode
 
   def create_flag
-    flag = Flag.create!([self.latitude, self.longitude, self.id])
+    flag = Flag.new(latitude: latitude, 
+                    longitude: longitude, 
+                    base_id: id)
+    flag.save
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171001213814) do
+ActiveRecord::Schema.define(version: 20171004185146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,15 @@ ActiveRecord::Schema.define(version: 20171001213814) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "address"
+  end
+
+  create_table "captures", force: :cascade do |t|
+    t.integer "flag_id"
+    t.integer "user_id"
+    t.datetime "dropped_time"
+    t.boolean "success"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "flags", force: :cascade do |t|
@@ -53,11 +62,12 @@ ActiveRecord::Schema.define(version: 20171001213814) do
     t.string "email"
     t.integer "team_id"
     t.integer "points"
-    t.integer "latitude"
-    t.integer "longitude"
+    t.float "latitude"
+    t.float "longitude"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "password_digest"
+    t.boolean "has_flag"
   end
 
 end

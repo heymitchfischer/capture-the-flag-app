@@ -1,0 +1,2 @@
+class Capture < ApplicationRecord
+end

@@ -32,15 +32,15 @@ class User < ApplicationRecord
           flag.save
           self.has_flag = true
           self.save
-          puts "The flag is yours!"
+          return "The flag is yours!"
         else
-          puts "That's your flag."
+          return "That's your flag."
         end
       else
-        puts "Not close enough to a flag."
+        return "Not close enough to a flag."
       end
     else
-      puts "You're currently stunned!"
+      return "You're currently stunned!"
     end
   end
 
@@ -66,15 +66,15 @@ class User < ApplicationRecord
           flag.save
           self.has_flag = true
           self.save
-          puts "You saved your flag!"
+          return "You saved your flag!"
         else
-          puts "That's the enemy's flag. Capture it!"
+          return "That's the enemy's flag. Capture it!"
         end
       else
-        puts "Not close enough to a flag."
+        return "Not close enough to a flag."
       end
     else
-      puts "You're currently stunned!"
+      return "You're currently stunned!"
     end
   end
 
@@ -98,7 +98,7 @@ class User < ApplicationRecord
                                 )
           flag.save
           Base.find(flag.base_id).create_flag
-          puts "You returned your team's flag!"
+          return "You returned your team's flag!"
         elsif self.team_id != flag.base.team_id
           capture.assign_attributes(success: true)
           capture.save
@@ -110,20 +110,20 @@ class User < ApplicationRecord
           self.team.assign_attributes(score: self.team.score + 1)
           self.team.save
           Base.find(flag.base_id).create_flag
-          puts "SCORE! You returned an enemy flag to your base."
+          return "SCORE! You returned an enemy flag to your base."
         end
       else
-        puts "Not close enough to your base."
+        return "Not close enough to your base."
       end
     else
-      puts "You have no flag to return."
+      return "You have no flag to return."
     end
   end
 
   def stun(enemy_id)
     enemy = User.find(enemy_id)
     if enemy.team_id == self.team_id
-      puts "#{enemy.name} is on your team!"
+      return "#{enemy.name} is on your team!"
     elsif self.distance_to(enemy) <= 0.006
       stun = Stun.new(
                       stunner_id: self.id,
@@ -132,7 +132,6 @@ class User < ApplicationRecord
       stun.save
       enemy.assign_attributes(time_stunned: stun.created_at)
       enemy.save
-      puts "You stunned #{enemy.name}!"
       self.assign_attributes(points: self.points + 2)
       self.save
       if enemy.has_flag
@@ -144,10 +143,12 @@ class User < ApplicationRecord
         flag.save
         enemy.save
         capture.save
-        puts "#{enemy.name} dropped the flag!"
+        return "You stunned #{enemy.name}! They dropped the flag!"
+      else
+        return "You stunned #{enemy.name}!"
       end
     else
-      puts "Too far away."
+      return "Too far away."
     end
   end
 

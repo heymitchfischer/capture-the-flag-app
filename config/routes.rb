@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/signup' => 'users#new'
   post '/users' => 'users#create'
   get '/users/:id' => 'users#show'
+  patch '/users/:id' => 'users#update'
 
   get '/login' => 'sessions#new'
   post '/login' => 'sessions#create'
@@ -15,4 +16,6 @@ Rails.application.routes.draw do
   get '/teams/:id' => 'teams#show'
 
   post '/messages' => 'messages#create'
+
+  post '/captures' => 'captures#create'
 end

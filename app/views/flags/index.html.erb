@@ -1,3 +1,35 @@
 <h1>Main Page</h1>
 
 <h2>There's a map here, on the right.</h2>
+
+<div>
+  <h3>Nearby Players:</h3>
+  <% @nearby_players.each do |player| %>
+    <% if player.id != current_user.id %>
+      <div>
+        Username: <%= player.name %>
+        <% if player.time_stunned != nil %>
+          <em>Stunned</em>
+        <% end %>
+        <% if player.has_flag %>
+          <em>Flag!</em>
+        <% end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
+<br>
+<div>
+  <h3>Bases:</h3>
+  <% @bases.each do |base| %>
+    <p><%= base.team.name %> <%= link_to "Travel To", "/users/#{current_user.id}/?base_id=#{base.id}", method: :patch %></p>
+  <% end %>
+</div>
+<br>
+<div>
+  <h3>Flags Nearby:</h3>
+  <%= link_to "Capture!", "/captures", method: :post %>
+  <% @flags.each do |flag| %>
+    <p><%= flag.base.team.name %> Flag</p>
+  <% end %>
+</div>

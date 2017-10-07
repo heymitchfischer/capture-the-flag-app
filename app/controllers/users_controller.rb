@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :authenticate_user!, except: [:new, :create]
 
   def index
-    
+
   end
 
   def new
@@ -29,5 +29,13 @@ class UsersController < ApplicationController
 
   def show
     
+  end
+
+  def update
+    base = Base.find(params[:base_id])
+    if base
+      current_user.go_to(base)
+    end
+    redirect_to "/flags"
   end
 end

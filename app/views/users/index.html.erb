@@ -1,3 +1,9 @@
 <h1>User Leaderboard          <a href="/teams">Team Leaderboard</a></h1>
 
 <h2>This will list the top users and their stats.</h2>
+
+<% @players.each do |player| %>
+  <div>
+    <h3><%= player.name %>: <%= player.points %></h3>
+  </div>
+<% end %> 

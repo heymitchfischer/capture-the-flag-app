@@ -1,6 +1,4 @@
-<h1>Main Page</h1>
-
-<h2>There's a map here, on the right.</h2>
+<h4>Main Page (The below is a stand-in for the Google Maps API and only serves as a simulation of the Grab/Rescue/Stun/Return methods.</h4>
 
 <div>
   <h3>Nearby Players:</h3>
@@ -8,11 +6,13 @@
     <% if player.id != current_user.id %>
       <div>
         Username: <%= player.name %>
-        <% if player.time_stunned != nil %>
-          <em>Stunned</em>
-        <% end %>
         <% if player.has_flag %>
-          <em>Flag!</em>
+          <em>(FLAG!)</em>
+        <% end %>
+        <% if player.time_stunned != nil %>
+          <em>(STUNNED)</em>
+        <% else %>
+          <%= link_to "Stun?", "/stuns/?id=#{player.id}", method: :post, class: "btn btn-primary" %>
         <% end %>
       </div>
     <% end %>
@@ -22,14 +22,27 @@
 <div>
   <h3>Bases:</h3>
   <% @bases.each do |base| %>
-    <p><%= base.team.name %> <%= link_to "Travel To", "/users/#{current_user.id}/?base_id=#{base.id}", method: :patch %></p>
+    <p>
+    <%= base.team.name %> <%= link_to "Travel To", "/users/#{current_user.id}/?base_id=#{base.id}", method: :patch, class: "btn btn-primary" %>
+    <% if base.team_id == current_user.team_id && current_user.has_flag && current_user.distance_to(base) <= 0.006 %>
+      <% if current_user.current_flag.base.team_id == current_user.team_id %>
+        <%= link_to "Return Flag", "/flags/#{current_user.current_flag.id}/?base_id=#{base.id}", method: :delete, class: "btn btn-primary"%>
+      <% elsif current_user.current_flag.base.team_id != current_user.team_id %>
+        <%= link_to "Score!", "/flags/#{current_user.current_flag.id}/?base_id=#{base.id}", method: :delete, class: "btn btn-primary"%>
+      <% end %>
+    <% end %>
+    </p>
   <% end %>
 </div>
 <br>
 <div>
   <h3>Flags Nearby:</h3>
-  <%= link_to "Capture!", "/captures", method: :post %>
-  <% @flags.each do |flag| %>
-    <p><%= flag.base.team.name %> Flag</p>
-  <% end %>
+    <% @flags.each do |flag| %>
+      <p><%= flag.base.team.name %> Flag</p>
+      <% if current_user.time_stunned == nil && current_user.has_flag == false && flag.base.team_id != current_user.team_id %>
+        <%= link_to "Capture!", "/flags/#{flag.id}", method: :patch, class: "btn btn-primary" %>
+      <% elsif current_user.time_stunned == nil && current_user.has_flag == false && flag.base.team_id == current_user.team_id && flag.captures != [] %>
+        <%= link_to "Rescue!", "/flags/#{flag.id}", method: :patch, class: "btn btn-primary" %>
+      <% end %>
+    <% end %>
 </div>

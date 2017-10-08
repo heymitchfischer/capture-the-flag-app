@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get '/' => 'flags#index'
   get '/flags' => 'flags#index'
+  patch '/flags/:id' => 'flags#update'
+  delete '/flags/:id' => 'flags#destroy'
 
   get '/users' => 'users#index'
   get '/signup' => 'users#new'
@@ -17,5 +19,5 @@ Rails.application.routes.draw do
 
   post '/messages' => 'messages#create'
 
-  post '/captures' => 'captures#create'
+  post '/stuns' => 'stuns#create'
 end

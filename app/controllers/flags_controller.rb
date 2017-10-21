@@ -5,6 +5,15 @@ class FlagsController < ApplicationController
     @nearby_players = User.near([current_user.latitude, current_user.longitude], 0.006)
     @bases = Base.all
     @flags = Flag.near([current_user.latitude, current_user.longitude], 0.006)
+    response = Unirest.get("http://ip-api.com/json").body
+    p response['lat']
+    p response['lon']
+    response = Unirest.get("http://ip-api.com/json/24.136.9.228").body
+    p response['lat']
+    p response['lon']
+    response = Unirest.get("http://ip-api.com/json/192.168.1.6").body
+    p response['lat']
+    p response['lon']
   end
 
   def update

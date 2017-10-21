@@ -3,6 +3,7 @@ class UsersController < ApplicationController
 
   def index
     @players = User.all
+    puts request.remote_ip
   end
 
   def new

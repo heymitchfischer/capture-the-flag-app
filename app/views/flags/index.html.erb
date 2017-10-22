@@ -1,5 +1,3 @@
-<h4>Main Page (The below is a stand-in for the Google Maps API and only serves as a simulation of the Grab/Rescue/Stun/Return methods.</h4>
-
 <h2>Current Coordinates: <%= current_user.latitude %>, <%= current_user.longitude %></h2>
 
 <div>
@@ -22,10 +20,10 @@
 </div>
 <br>
 <div>
-  <h3>Bases:</h3>
+  <h3>Nearby Bases:</h3>
   <% @bases.each do |base| %>
     <p>
-    <%= base.team.name %> <%= link_to "Travel To", "/users/#{current_user.id}/?base_id=#{base.id}", method: :patch, class: "btn btn-primary" %>
+    <%= base.team.name %>
     <% if base.team_id == current_user.team_id && current_user.has_flag && current_user.distance_to(base) <= 0.006 %>
       <% if current_user.current_flag.base.team_id == current_user.team_id %>
         <%= link_to "Return Flag", "/flags/#{current_user.current_flag.id}/?base_id=#{base.id}", method: :delete, class: "btn btn-primary"%>

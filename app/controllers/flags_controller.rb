@@ -9,7 +9,7 @@ class FlagsController < ApplicationController
                                   )
     current_user.save
     @nearby_players = User.near([current_user.latitude, current_user.longitude], 0.006)
-    @bases = Base.all
+    @bases = Base.near([current_user.latitude, current_user.longitude], 0.006)
     @flags = Flag.near([current_user.latitude, current_user.longitude], 0.006)
   end
 

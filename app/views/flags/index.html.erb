@@ -1,5 +1,7 @@
 <h4>Main Page (The below is a stand-in for the Google Maps API and only serves as a simulation of the Grab/Rescue/Stun/Return methods.</h4>
 
+<h2>Current Coordinates: <%= current_user.latitude %>, <%= current_user.longitude %></h2>
+
 <div>
   <h3>Nearby Players:</h3>
   <% @nearby_players.each do |player| %>

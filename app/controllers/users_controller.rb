@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create]
+  before_action :authenticate_user!, except: [:new, :create, :update]
 
   def index
     @players = User.all
@@ -33,10 +33,23 @@ class UsersController < ApplicationController
   end
 
   def update
-    base = Base.find(params[:base_id])
-    if base
-      current_user.go_to(base)
+    response = Unirest.get("http://ip-api.com/json").body
+    if current_user 
+      current_user.assign_attributes(
+                                      latitude: response['lat'],
+                                      longitude: response['lon']
+                                    )
+      current_user.save
     end
-    redirect_to "/flags"
+    p response['lat']
+    #   ActionCable.server.broadcast 'location_channel', latitude: current_user.latitude, longitude: current_user.longitude
+    #   head :ok
+    # end
+
+    # base = Base.find(params[:base_id])
+    # if base
+    #   current_user.go_to(base)
+    # end
+    # # redirect_to "/flags"
   end
 end

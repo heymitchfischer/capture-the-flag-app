@@ -14,3 +14,9 @@
 //= require jquery 
 //= require bootstrap-sprockets
 //= require_tree .
+
+function findLocation() {
+  setInterval(function() {
+    $.post(`/users/edit`, function() {});
+  }, 5000);
+}

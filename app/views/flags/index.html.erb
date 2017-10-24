@@ -36,7 +36,7 @@
 </div>
 <br>
 <div>
-  <h3>Flags Nearby:</h3>
+  <h3>Nearby Flags:</h3>
     <% @flags.each do |flag| %>
       <p><%= flag.base.team.name %> Flag</p>
       <% if current_user.time_stunned == nil && current_user.has_flag == false && flag.base.team_id != current_user.team_id %>

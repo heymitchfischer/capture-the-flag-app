@@ -8,6 +8,10 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_user
 
+  def logged_in?
+    p !current_user.nil?
+  end
+
   def if_stunned
     if current_user && current_user.time_stunned != nil
       if DateTime.now >= current_user.time_stunned + 10.minutes

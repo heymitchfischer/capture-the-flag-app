@@ -15,8 +15,23 @@
 //= require bootstrap-sprockets
 //= require_tree .
 
-function findLocation() {
+var x = document.getElementById("coords");
+
+function updateLocation(userID) {
   setInterval(function() {
-    $.post(`/users/edit`, function() {});
-  }, 5000);
+    console.log(userID);
+    getLocation();
+  }, 10000);
+}
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  $.post('/users/edit', {latitude: position.coords.latitude, longitude: position.coords.longitude, input: 1}, function() {});
 }

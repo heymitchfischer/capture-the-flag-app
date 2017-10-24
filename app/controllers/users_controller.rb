@@ -3,7 +3,6 @@ class UsersController < ApplicationController
 
   def index
     @players = User.all
-    puts request.remote_ip
   end
 
   def new
@@ -33,23 +32,18 @@ class UsersController < ApplicationController
   end
 
   def update
-    response = Unirest.get("http://ip-api.com/json").body
-    if current_user 
-      current_user.assign_attributes(
-                                      latitude: response['lat'],
-                                      longitude: response['lon']
-                                    )
-      current_user.save
-    end
-    p response['lat']
+    user = User.find(params[:input])
+    lat = params[:latitude].to_d
+    lon = params[:longitude].to_d
+    user.update(
+                            latitude: lat,
+                            longitude: lon
+                            )
+    p params[:longitude]
+    p params["latitude"]
+    p User.find(1)
     #   ActionCable.server.broadcast 'location_channel', latitude: current_user.latitude, longitude: current_user.longitude
     #   head :ok
     # end
-
-    # base = Base.find(params[:base_id])
-    # if base
-    #   current_user.go_to(base)
-    # end
-    # # redirect_to "/flags"
   end
 end

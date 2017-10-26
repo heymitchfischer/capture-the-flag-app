@@ -32,18 +32,17 @@ class UsersController < ApplicationController
   end
 
   def update
-    user = User.find(params[:input])
+    player = User.find(params[:id])
     lat = params[:latitude].to_d
     lon = params[:longitude].to_d
-    user.update(
-                            latitude: lat,
-                            longitude: lon
-                            )
+    player.update(
+                  latitude: lat,
+                  longitude: lon
+                  )
     p params[:longitude]
-    p params["latitude"]
-    p User.find(1)
-    #   ActionCable.server.broadcast 'location_channel', latitude: current_user.latitude, longitude: current_user.longitude
-    #   head :ok
-    # end
+    p params[:latitude]
+    p player.latitude
+    p player.longitude
+    p player
   end
 end

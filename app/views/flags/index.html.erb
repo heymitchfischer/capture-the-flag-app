@@ -1,6 +1,6 @@
-<h2>Current Coordinates: <%= current_user.latitude %>, <%= current_user.longitude %></h2>
+<h2 id="coords">Current Coordinates: <%= current_user.latitude %>, <%= current_user.longitude %></h2>
 
-<div>
+<div id="nearby_players">
   <h3>Nearby Players:</h3>
   <% @nearby_players.each do |player| %>
     <% if player.id != current_user.id %>
@@ -19,7 +19,7 @@
   <% end %>
 </div>
 <br>
-<div>
+<div id="nearby_bases">
   <h3>Nearby Bases:</h3>
   <% @bases.each do |base| %>
     <p>
@@ -35,7 +35,7 @@
   <% end %>
 </div>
 <br>
-<div>
+<div id="nearby_flags">
   <h3>Nearby Flags:</h3>
     <% @flags.each do |flag| %>
       <p><%= flag.base.team.name %> Flag</p>

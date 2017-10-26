@@ -2,12 +2,6 @@ class FlagsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    response = Unirest.get("http://ip-api.com/json").body
-    current_user.assign_attributes(
-                                    latitude: response['lat'],
-                                    longitude: response['lon']
-                                  )
-    current_user.save
     @nearby_players = User.near([current_user.latitude, current_user.longitude], 0.006)
     @bases = Base.near([current_user.latitude, current_user.longitude], 0.006)
     @flags = Flag.near([current_user.latitude, current_user.longitude], 0.006)

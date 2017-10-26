@@ -1,7 +1,6 @@
 App.location = App.cable.subscriptions.create("LocationChannel", {
   connected: function() {
     // Called when the subscription is ready for use on the server
-    console.log("Hi");
   },
 
   disconnected: function() {
@@ -10,5 +9,7 @@ App.location = App.cable.subscriptions.create("LocationChannel", {
 
   received: function(data) {
     // Called when there's incoming data on the websocket for this channel
+    $("#coords").html(`Current Coordinates: ${data.playerLatitude}, ${data.playerLongitude}`);
+    
   }
 });

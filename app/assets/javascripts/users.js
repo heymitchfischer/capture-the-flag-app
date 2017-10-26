@@ -7,7 +7,7 @@ function updateLocation(userID) {
       function(position) {
         $.ajax({
                 type: 'PATCH',
-                url: `/users/${userID}/edit`,
+                url: `/users/${userID}`,
                 data: {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude

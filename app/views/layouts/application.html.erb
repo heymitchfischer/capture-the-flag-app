@@ -9,7 +9,6 @@
     <meta name="author" content="">
 
     <title>Chicago-Wide</title>
-
     <!-- Bootstrap core CSS -->
     <link href="/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
@@ -21,13 +20,13 @@
     <!-- Custom styles for this template -->
     <link href="/css/clean-blog.css" rel="stylesheet">
     <%= csrf_meta_tags %>
-
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
 
   </head>
 
   <body <% if current_user %> onload="updateLocation(<%= raw current_user.id %>)"<% end %>>
+  <%= Gon::Base.render_data %>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">

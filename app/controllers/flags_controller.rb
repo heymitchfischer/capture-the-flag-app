@@ -3,6 +3,7 @@ class FlagsController < ApplicationController
 
   def index
     @nearby_players = User.near([current_user.latitude, current_user.longitude], 0.006)
+    gon.nearby_players = User.near([current_user.latitude, current_user.longitude], 0.006)
     @bases = Base.near([current_user.latitude, current_user.longitude], 0.006)
     @flags = Flag.near([current_user.latitude, current_user.longitude], 0.006)
   end

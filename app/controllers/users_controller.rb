@@ -39,12 +39,9 @@ class UsersController < ApplicationController
                   latitude: lat,
                   longitude: lon
                   )
-    gon.user_id = player.id
     gon.nearby_players = User.near([player.latitude, player.longitude], 0.006)
-    gon.bases = Base.near([player.latitude, player.longitude], 0.006)
-    gon.flags = Flag.near([player.latitude, player.longitude], 0.006)
     ActionCable.server.broadcast 'location_channel',
-                                  userID: player.id,
+                                  userId: player.id,
                                   playerLatitude: player.latitude,
                                   playerLongitude: player.longitude,
                                   bases: Base.near([player.latitude, player.longitude], 0.006),

@@ -39,13 +39,9 @@ class UsersController < ApplicationController
                   latitude: lat,
                   longitude: lon
                   )
-    gon.nearby_players = User.near([player.latitude, player.longitude], 0.006)
-    ActionCable.server.broadcast 'location_channel',
-                                  userId: player.id,
-                                  playerLatitude: player.latitude,
-                                  playerLongitude: player.longitude,
-                                  bases: Base.near([player.latitude, player.longitude], 0.006),
-                                  flags: Flag.near([player.latitude, player.longitude], 0.006)
-    render json: {}, status: 200
+    @players = User.near([player.latitude, player.longitude], 0.006).where.not(id: player.id)
+    @bases = Base.near([player.latitude, player.longitude], 0.006)
+    @flags = Flag.near([player.latitude, player.longitude], 0.006)
+    render json: @players, status: 200
   end
 end

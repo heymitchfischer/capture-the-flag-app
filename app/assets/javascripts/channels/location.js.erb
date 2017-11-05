@@ -11,6 +11,6 @@ App.location = App.cable.subscriptions.create("LocationChannel", {
     // Called when there's incoming data on the websocket for this channel
     $("#coords").html(`Current Coordinates: ${data.playerLatitude}, ${data.playerLongitude}`);
     console.log(gon.nearby_players);
-    $("#nearby_players").html("<h3>Nearby Players:</h3><br><% if Gon.nearby_players %><% Gon.nearby_players.each do |player| %><div>Username: <%= player.name %><bk><% if player.has_flag %><em>(FLAG!)</em><% end %><% if player.time_stunned != nil %><em>(STUNNED)</em><% end %></div><% end %><% end %>");
+    // $("#nearby_players").html("<h3>Nearby Players:</h3><br><% if Gon.nearby_players %><% Gon.nearby_players.each do |player| %><div>Username: <%= player.name %><bk><% if player.has_flag %><em>(FLAG!)</em><% end %><% if player.time_stunned != nil %><em>(STUNNED)</em><% end %></div><% end %><% end %>");
   }
 });

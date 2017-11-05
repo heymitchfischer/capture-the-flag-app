@@ -1,22 +1,13 @@
 <h2 id="coords">Current Coordinates: <%= current_user.latitude %>, <%= current_user.longitude %></h2>
 
-<div id="nearby_players">
+<div id="app">
   <h3>Nearby Players:</h3>
-  <% @nearby_players.each do |player| %>
-    <% if player.id != current_user.id %>
-      <div>
-        Username: <%= player.name %>
-        <% if player.has_flag %>
-          <em>(FLAG!)</em>
-        <% end %>
-        <% if player.time_stunned != nil %>
-          <em>(STUNNED)</em>
-        <% else %>
-          <%= link_to "Stun?", "/stuns/?id=#{player.id}", method: :post, class: "btn btn-primary" %>
-        <% end %>
-      </div>
-    <% end %>
-  <% end %>
+    <div v-for="player in players">
+      <h4>{{player.name}}</h4>
+      <h6 v-if="playerHasFlag(player)">Flag!</h6>
+      <h6 v-if="playerIsStunned(player)">Stunned</h6>
+      <button v-if="playerIsStunnable(player)" v-on:click="stunPlayer(player)">Stun!</button>
+    </div>
 </div>
 <br>
 <div id="nearby_bases">

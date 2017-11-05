@@ -2,11 +2,11 @@ class FlagsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    gon.current_user = current_user
-    @nearby_players = User.near([current_user.latitude, current_user.longitude], 0.006)
-    gon.nearby_players = User.near([current_user.latitude, current_user.longitude], 0.006)
-    @bases = Base.near([current_user.latitude, current_user.longitude], 0.006)
-    @flags = Flag.near([current_user.latitude, current_user.longitude], 0.006)
+    Gon.global.current_user = current_user
+    @nearby_players = User.near([current_user.latitude, current_user.longitude], 0.01)
+    gon.nearby_players = User.near([current_user.latitude, current_user.longitude], 0.01)
+    @bases = Base.near([current_user.latitude, current_user.longitude], 0.01)
+    @flags = Flag.near([current_user.latitude, current_user.longitude], 0.01)
   end
 
   def update

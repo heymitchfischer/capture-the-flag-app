@@ -39,9 +39,10 @@ class UsersController < ApplicationController
                   latitude: lat,
                   longitude: lon
                   )
-    @players = User.near([player.latitude, player.longitude], 0.006).where.not(id: player.id)
-    @bases = Base.near([player.latitude, player.longitude], 0.006)
-    @flags = Flag.near([player.latitude, player.longitude], 0.006)
-    render json: @players, status: 200
+    gon.global.current_user = player
+    @players = User.near([player.latitude, player.longitude], 0.01).where.not(id: player.id)
+    @bases = Base.near([player.latitude, player.longitude], 0.01)
+    @flags = Flag.near([player.latitude, player.longitude], 0.01)
+    render json: [@players.to_json(include: [:team, :captures]), @bases.to_json(include: :team), @flags.to_json(include: :team)], status: 200
   end
 end

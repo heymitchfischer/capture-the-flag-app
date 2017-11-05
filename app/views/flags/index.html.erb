@@ -8,32 +8,22 @@
       <h6 v-if="playerIsStunned(player)">Stunned</h6>
       <button v-if="playerIsStunnable(player)" v-on:click="stunPlayer(player)">Stun!</button>
     </div>
-</div>
-<br>
-<div id="nearby_bases">
+  <br>
   <h3>Nearby Bases:</h3>
-  <% @bases.each do |base| %>
-    <p>
-    <%= base.team.name %>
-    <% if base.team_id == current_user.team_id && current_user.has_flag && current_user.distance_to(base) <= 0.006 %>
-      <% if current_user.current_flag.base.team_id == current_user.team_id %>
-        <%= link_to "Return Flag", "/flags/#{current_user.current_flag.id}/?base_id=#{base.id}", method: :delete, class: "btn btn-primary"%>
-      <% elsif current_user.current_flag.base.team_id != current_user.team_id %>
-        <%= link_to "Score!", "/flags/#{current_user.current_flag.id}/?base_id=#{base.id}", method: :delete, class: "btn btn-primary"%>
-      <% end %>
-    <% end %>
-    </p>
-  <% end %>
-</div>
-<br>
-<div id="nearby_flags">
+  <div v-for="base in bases">
+    <h4>{{base.team.name}} Base</h4>
+    <template v-if="baseIsAlly(base)">
+      <button v-if="playerHasAllyFlag()" v-on:click="returnFlag()">Return Flag</button>
+      <button v-if="playerHasEnemyFlag()" v-on:click="score()">Score</button> 
+    </template>
+  </div>
+  <br>
   <h3>Nearby Flags:</h3>
-    <% @flags.each do |flag| %>
-      <p><%= flag.base.team.name %> Flag</p>
-      <% if current_user.time_stunned == nil && current_user.has_flag == false && flag.base.team_id != current_user.team_id %>
-        <%= link_to "Capture!", "/flags/#{flag.id}", method: :patch, class: "btn btn-primary" %>
-      <% elsif current_user.time_stunned == nil && current_user.has_flag == false && flag.base.team_id == current_user.team_id && flag.captures != [] %>
-        <%= link_to "Rescue!", "/flags/#{flag.id}", method: :patch, class: "btn btn-primary" %>
-      <% end %>
-    <% end %>
+    <div v-for="flag in flags">
+      <h4>{{flag.team.name}} Flag</h4>
+      <template v-if="playerCanPickUpFlag()">
+        <button v-if="isEnemyFlag(flag)" v-on:click="capture()"></button>
+        <button v-if="isAllyFlag(flag)" v-on:click="rescue()"></button>
+      </template>
+    </div>
 </div>

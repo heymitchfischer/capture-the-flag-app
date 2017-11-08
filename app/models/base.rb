@@ -8,7 +8,9 @@ class Base < ApplicationRecord
   def create_flag
     flag = Flag.new(latitude: self.latitude, 
                     longitude: self.longitude, 
-                    base_id: self.id)
+                    base_id: self.id,
+                    team_id: self.team_id
+                    )
     flag.save
   end
 end

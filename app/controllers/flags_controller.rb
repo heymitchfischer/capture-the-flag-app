@@ -1,8 +1,7 @@
 class FlagsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: [:update, :destroy]
 
   def index
-    Gon.global.current_user = current_user
     @nearby_players = User.near([current_user.latitude, current_user.longitude], 0.01)
     gon.nearby_players = User.near([current_user.latitude, current_user.longitude], 0.01)
     @bases = Base.near([current_user.latitude, current_user.longitude], 0.01)
@@ -10,27 +9,33 @@ class FlagsController < ApplicationController
   end
 
   def update
-    flag = Flag.find(params[:id])
-    if current_user.team_id != flag.base.team_id
-      flash[:success] = current_user.grab(flag.id)
+    @player = User.find(params[:userId])
+    flag = Flag.find(params[:flagId])
+    if @player.team_id != flag.team_id
+      flash[:success] = @player.grab(flag.id)
     else
-      flash[:success] = current_user.rescue(flag.id)
+      flash[:success] = @player.retrieve(flag.id)
     end
-    redirect_to "/flags"
+    @bases = Base.near([@player.latitude, @player.longitude], 0.01)
+    @flags = Flag.near([@player.latitude, @player.longitude], 0.01)
+    render json: [@bases.to_json(include: :team), @flags.to_json(include: [:team, :captures]), @player.to_json(include: [:team, :captures, :flags])], status: 200
   end
 
   def destroy
-    flag = Flag.find(params[:id])
-    base = Base.find(params[:base_id])
+    flag = Flag.find(params[:flagId])
+    base = Base.find(params[:baseId])
+    @player = User.find(params[:userId])
     original_base = Base.find(flag.base_id)
     capture = flag.captures.where(success: nil).first
-    if current_user.has_flag && current_user.team_id == flag.base.team_id
-      flash[:success] = current_user.bring_back(flag, base, original_base, capture)
-    elsif current_user.has_flag && current_user.team_id != flag.base.team_id
-      flash[:success] = current_user.score_point(flag, base, original_base, capture)
+    if @player.has_flag && @player.team_id == flag.base.team_id
+      flash[:success] = @player.bring_back(flag, base, original_base, capture)
+    elsif @player.has_flag && @player.team_id != flag.base.team_id
+      flash[:success] = @player.score_point(flag, base, original_base, capture)
     else
       flash[:warning] = "You can't do that."
     end
-    redirect_to "/flags"
+    @bases = Base.near([@player.latitude, @player.longitude], 0.01)
+    @flags = Flag.near([@player.latitude, @player.longitude], 0.01)
+    render json: [@bases.to_json(include: :team), @flags.to_json(include: [:team, :captures]), @player.to_json(include: [:team, :captures, :flags])], status: 200
   end
 end

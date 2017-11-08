@@ -5,36 +5,36 @@ document.addEventListener("DOMContentLoaded", function(event) {
     data: {
       players: [],
       bases: [],
-      flags: []
+      flags: [],
+      currentUser: {}
     },
 
     mounted: function() {
       setInterval(function() {
-        console.log(gon.global.current_user.id);
-          navigator.geolocation.getCurrentPosition(
-            function(position) {
-              $.ajax({
-                      type: 'PATCH',
-                      url: `/users/${gon.global.current_user.id}.json`,
-                      data: {
-                              latitude: position.coords.latitude,
-                              longitude: position.coords.longitude
-                            },
-                      success: function(result) {
-                                                  this.players = JSON.parse(result[0]);
-                                                  this.bases = JSON.parse(result[1]);
-                                                  this.flags = JSON.parse(result[2]);
-                                                }.bind(this),
-                    });
-            }.bind(this), 
-            function(error) {
-              alert(error.message);
-            });
-          console.log(this.players);
-          console.log(this.bases);
-          console.log(this.flags);
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            $.ajax({
+                    type: 'PATCH',
+                    url: `/users/${gon.current_user.id}.json`,
+                    data: {
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude
+                          },
+                    success: function(result) {
+                                                this.players = JSON.parse(result[0]);
+                                                this.bases = JSON.parse(result[1]);
+                                                this.flags = JSON.parse(result[2]);
+                                                this.currentUser = JSON.parse(result[3]);
+                                              }.bind(this),
+                  });
+          }.bind(this), 
+          function(error) {
+            alert(error.message);
+          }
+        );
       }.bind(this), 5000);    
     },
+
     methods: {
       playerHasFlag: function(player) {
         return player.has_flag;
@@ -49,51 +49,79 @@ document.addEventListener("DOMContentLoaded", function(event) {
       },
 
       playerIsStunnable: function(player) {
-        return player.team_id !== gon.global.current_user.team_id && player.time_stunned === null;
+        return player.team_id !== this.currentUser.team_id && player.time_stunned === null && this.currentUser.time_stunned === null;
       },
 
-      stunPlayer: function(player) {
-
-      },
-
-      baseIsAlly: function(base) {
-        return gon.global.current_user.team_id === base.team_id;
-      },
-
-      playerHasAllyFlag: function() {
-        console.log(gon.global.current_user.latitude);
-      },
-
-      playerHasEnemyFlag: function() {
-        return gon.global.current_user.has_flag;
-      },
-
-      returnFlag: function() {
-
-      },
-
-      score: function() {
-
+      isAllyBase: function(baseTeamId) {
+        return baseTeamId === this.currentUser.team_id;
       },
 
       isEnemyFlag: function(flag) {
-
+        return flag.team_id !== this.currentUser.team_id;
       },
 
       isAllyFlag: function(flag) {
-
+        return flag.team_id === this.currentUser.team_id && flag.captures.length > 0;
       },
 
-      capture: function() {
-
+      canReturnFlag: function() {
+        return this.currentUser.has_flag && this.currentUser.team_id === this.currentUser.flags[this.currentUser.flags.length - 1].team_id;
       },
 
-      rescue: function() {
-
+      canScoreFlag: function() {
+        return this.currentUser.has_flag && this.currentUser.team_id !== this.currentUser.flags[this.currentUser.flags.length - 1].team_id;
       },
 
-      playerCanPickUpFlag: function() {
-        return gon.global.current_user.time_stunned === null;
+      stunPlayer: function(player, user) {
+        $.ajax({
+          type: 'POST',
+          url: '/stuns.json',
+          data: {
+                  userId: user,
+                  enemyId: player
+                },
+          success: function(result) {
+                                      this.players = JSON.parse(result[0]);
+                                      this.flags = JSON.parse(result[1]);
+                                      this.currentUser = JSON.parse(result[2]);
+                                    }.bind(this),
+          async: false
+        });
+      },
+
+      returnFlag: function(base) {
+        $.ajax({
+          type: 'DELETE',
+          url: `/flags/${this.currentUser.flags[this.currentUser.flags.length - 1].id}.json`,
+          data: {
+                  userId: this.currentUser.id,
+                  baseId: base,
+                  flagId: this.currentUser.flags[this.currentUser.flags.length - 1].id
+                },
+          success: function(result) {
+                                      this.bases = JSON.parse(result[0]);
+                                      this.flags = JSON.parse(result[1]);
+                                      this.currentUser = JSON.parse(result[2]);
+                                    }.bind(this),
+          async: false
+        });
+      },
+
+      capture: function(flag, user) {
+        $.ajax({
+          type: 'PATCH',
+          url: `/flags/${flag}.json`,
+          data: {
+                  userId: user,
+                  flagId: flag
+                },
+          success: function(result) {
+                                      this.bases = JSON.parse(result[0]);
+                                      this.flags = JSON.parse(result[1]);
+                                      this.currentUser = JSON.parse(result[2]);
+                                    }.bind(this),
+          async: false
+        });
       }
     },
 

@@ -1,29 +1,28 @@
-<h2 id="coords">Current Coordinates: <%= current_user.latitude %>, <%= current_user.longitude %></h2>
-
 <div id="app">
+<h2>Current Coordinates: {{ currentUser.latitude }}, {{ currentUser.longitude }}</h2>
   <h3>Nearby Players:</h3>
     <div v-for="player in players">
       <h4>{{player.name}}</h4>
       <h6 v-if="playerHasFlag(player)">Flag!</h6>
       <h6 v-if="playerIsStunned(player)">Stunned</h6>
-      <button v-if="playerIsStunnable(player)" v-on:click="stunPlayer(player)">Stun!</button>
+      <button v-if="playerIsStunnable(player)" v-on:click="stunPlayer(player.id, <%= current_user.id %>)">Stun!</button>
     </div>
   <br>
   <h3>Nearby Bases:</h3>
   <div v-for="base in bases">
     <h4>{{base.team.name}} Base</h4>
-    <template v-if="baseIsAlly(base)">
-      <button v-if="playerHasAllyFlag()" v-on:click="returnFlag()">Return Flag</button>
-      <button v-if="playerHasEnemyFlag()" v-on:click="score()">Score</button> 
+    <template v-if="isAllyBase(base.team_id)">
+      <button v-if="canReturnFlag()" v-on:click="returnFlag(base.id)">Return Flag</button>
+      <button v-if="canScoreFlag()" v-on:click="returnFlag(base.id)">Score</button> 
     </template>
   </div>
   <br>
   <h3>Nearby Flags:</h3>
     <div v-for="flag in flags">
       <h4>{{flag.team.name}} Flag</h4>
-      <template v-if="playerCanPickUpFlag()">
-        <button v-if="isEnemyFlag(flag)" v-on:click="capture()"></button>
-        <button v-if="isAllyFlag(flag)" v-on:click="rescue()"></button>
+      <template v-if="<%= current_user.time_stunned == nil %>">
+        <button v-if="isEnemyFlag(flag)" v-on:click="capture(flag.id, <%= current_user.id %>)">Capture!</button>
+        <button v-if="isAllyFlag(flag)" v-on:click="capture(flag.id, <%= current_user.id %>)">Rescue!</button>
       </template>
     </div>
 </div>

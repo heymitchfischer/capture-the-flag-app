@@ -4,6 +4,7 @@ class User < ApplicationRecord
   belongs_to :team
   has_many :messages
   has_many :captures
+  has_many :flags, through: :captures
   has_many :stunners, :class_name => 'Stun', :foreign_key => 'stunner_id'
   has_many :stunnees, :class_name => 'Stun', :foreign_key => 'stunnee_id'
 
@@ -12,7 +13,7 @@ class User < ApplicationRecord
 
   def grab(flag_id)
     flag = Flag.find(flag_id)
-    if time_stunned == nil && self.has_flag == false && self.distance_to(flag) <= 0.006 && flag.base.team_id != self.team_id
+    if time_stunned == nil && self.has_flag != true && self.distance_to(flag) <= 0.01 && flag.base.team_id != self.team_id
       capture = Capture.new(
                             flag_id: flag.id,
                             user_id: self.id,
@@ -29,9 +30,9 @@ class User < ApplicationRecord
     end
   end
 
-  def rescue(flag_id)
+  def retrieve(flag_id)
     flag = Flag.find(flag_id)
-    if time_stunned == nil && self.has_flag == false && self.distance_to(flag) <= 0.006 && flag.base.team_id == self.team_id && flag.captures != []
+    if self.time_stunned == nil && self.has_flag != true && self.distance_to(flag) <= 0.01 && flag.team_id == self.team_id && flag.captures.length > 0
       capture = Capture.new(
                             flag_id: flag.id,
                             user_id: self.id,
@@ -44,7 +45,7 @@ class User < ApplicationRecord
       self.save
       return "You rescued your flag!"
     else
-      return "You can't do that."
+      p "You can't do that."
     end
   end
 
@@ -81,7 +82,7 @@ class User < ApplicationRecord
 
   def stun(enemy_id)
     enemy = User.find(enemy_id)
-    if enemy.team_id != self.team_id && self.distance_to(enemy) <= 0.006
+    if enemy.team_id != self.team_id && self.distance_to(enemy) <= 0.01
       stun = Stun.new(
                       stunner_id: self.id,
                       stunnee_id: enemy_id

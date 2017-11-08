@@ -15,7 +15,9 @@ class UsersController < ApplicationController
                     email: params[:email],
                     password: params[:password],
                     password_confirmation: params[:password_confirmation],
-                    team_id: params[:team_id]
+                    team_id: params[:team_id],
+                    has_flag: false,
+                    points: 0
                     )
     if user.save
       session[:user_id] = user.id
@@ -32,17 +34,16 @@ class UsersController < ApplicationController
   end
 
   def update
-    player = User.find(params[:id])
+    @player = User.find(params[:id])
     lat = params[:latitude].to_f
     lon = params[:longitude].to_f
-    player.update(
+    @player.update(
                   latitude: lat,
                   longitude: lon
                   )
-    gon.global.current_user = player
-    @players = User.near([player.latitude, player.longitude], 0.01).where.not(id: player.id)
-    @bases = Base.near([player.latitude, player.longitude], 0.01)
-    @flags = Flag.near([player.latitude, player.longitude], 0.01)
-    render json: [@players.to_json(include: [:team, :captures]), @bases.to_json(include: :team), @flags.to_json(include: :team)], status: 200
+    @players = User.near([@player.latitude, @player.longitude], 0.01).where.not(id: @player.id)
+    @bases = Base.near([@player.latitude, @player.longitude], 0.01)
+    @flags = Flag.near([@player.latitude, @player.longitude], 0.01)
+    render json: [@players.to_json(include: [:team, :captures]), @bases.to_json(include: :team), @flags.to_json(include: [:team, :captures]), @player.to_json(include: [:team, :captures, :flags])], status: 200
   end
 end

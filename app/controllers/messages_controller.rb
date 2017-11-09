@@ -1,10 +1,16 @@
 class MessagesController < ApplicationController
   def create
-    message = Message.new(
-                          text: params[:text],
-                          user_id: current_user.id
-                          )
-    message.save
-    redirect_to "/teams/#{current_user.team.id}"
+    if params[:text] != ""
+      message = Message.new(
+                            text: params[:text],
+                            user_id: current_user.id
+                            )
+      if message.save
+        ActionCable.server.broadcast 'room_channel',
+          content: message.text,
+          username: message.user.name,
+          created_at: message.created_at
+      end
+    end
   end
 end

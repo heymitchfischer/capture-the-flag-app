@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
             alert(error.message);
           }
         );
-      }.bind(this), 5000);    
+      }.bind(this), 7000);    
     },
 
     methods: {

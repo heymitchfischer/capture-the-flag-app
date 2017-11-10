@@ -1,29 +1,29 @@
 <div class="container">
-  <h1>Your Team: <%= @team.name %></h1>
-  <h3>Captured Flags: <%= @team.score %></h3>
-
-  <img src="<%= @team.image %>">
-
-  <h2>Messages and Updates:</h2>
-  <div id="message-table">
-    <div id="messages">
-      <% @team.messages.each do |message| %>
-        <div class="post-preview">
-          <h3 class="post-subtitle">
-            <h5><%= message.text %></h5>
-          </h3>
-          <p class="post-meta"><b><%= message.user.name %></b> at <%= message.created_at %></p>
-        </div>
-      <hr>
-      <% end %>
+  <div class="grey-container">
+    <div id="team-info">
+      <h1><%= @team.name %> Team</h1>
+      <h3>Captured Flags: <%= @team.score %></h3>
     </div>
-    <div id="message-input">
-      <%= form_tag "/messages", method: :post do %>
-        <div>
-          <input type="text" name="text">
-        </div>
-        <input type="submit" value="Post Message">
-      <% end %>
+
+    <div id="message-table">
+      <div id="messages">
+        <% @team.messages.each do |message| %>
+          <div class="post-preview">
+            <h3 class="post-subtitle">
+              <h5><%= message.text %></h5>
+            </h3>
+            <p class="post-meta"><b><%= message.user.name %></b> at <%= message.created_at %></p>
+          </div>
+        <hr>
+        <% end %>
+      </div>
+      <div id="message-input">
+        <%= form_tag "/messages", method: :post do %>
+          <div>
+            <input id="message-line" type="text" name="text"><input id="send-button" type="submit" value="Send">
+          </div>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>

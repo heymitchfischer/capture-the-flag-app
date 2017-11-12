@@ -16,8 +16,8 @@ class FlagsController < ApplicationController
     else
       flash[:success] = @player.retrieve(flag.id)
     end
-    @bases = Base.near([@player.latitude, @player.longitude], 0.01)
-    @flags = Flag.near([@player.latitude, @player.longitude], 0.01)
+    @bases = Base.near([@player.latitude, @player.longitude], 30)
+    @flags = Flag.near([@player.latitude, @player.longitude], 30)
     render json: [@bases.to_json(include: :team), @flags.to_json(include: [:team, :captures]), @player.to_json(include: [:team, :captures, :flags])], status: 200
   end
 
@@ -34,8 +34,8 @@ class FlagsController < ApplicationController
     else
       flash[:warning] = "You can't do that."
     end
-    @bases = Base.near([@player.latitude, @player.longitude], 0.01)
-    @flags = Flag.near([@player.latitude, @player.longitude], 0.01)
+    @bases = Base.near([@player.latitude, @player.longitude], 30)
+    @flags = Flag.near([@player.latitude, @player.longitude], 30)
     render json: [@bases.to_json(include: :team), @flags.to_json(include: [:team, :captures]), @player.to_json(include: [:team, :captures, :flags])], status: 200
   end
 end

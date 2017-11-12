@@ -42,8 +42,8 @@ class UsersController < ApplicationController
                   longitude: lon
                   )
     @players = User.near([@player.latitude, @player.longitude], 0.01).where.not(id: @player.id)
-    @bases = Base.near([@player.latitude, @player.longitude], 0.01)
-    @flags = Flag.near([@player.latitude, @player.longitude], 0.01)
+    @bases = Base.near([@player.latitude, @player.longitude], 30.00)
+    @flags = Flag.near([@player.latitude, @player.longitude], 30.00)
     render json: [@players.to_json(include: [:team, :captures]), @bases.to_json(include: :team), @flags.to_json(include: [:team, :captures]), @player.to_json(include: [:team, :captures, :flags])], status: 200
   end
 end

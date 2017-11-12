@@ -8,8 +8,6 @@ App.room = App.cable.subscriptions.create("RoomChannel", {
   },
 
   received: function(data) {
-    $('#messages').append('<div class="post-preview">' + '<h3 class="post-subtitle">' + '<h5>' + data.content + '</h5>' + '</h3>' + '<p class="post-meta"><b>' + data.username + '</b> at ' + data.created_at + '</p>' + '</div>' + '<hr>');
-    var  messageLine = document.getElementById("message-line");
-    messageLine.value = "";
+    $('#messages-' + data.room_id).append('<div class="post-preview">' + '<h3 class="post-subtitle">' + '<h5>' + data.content + '</h5>' + '</h3>' + '<p class="post-meta"><b>' + data.username + '</b> at ' + data.created_at + '</p>' + '</div>' + '<hr>');
   }
 });

@@ -10,7 +10,34 @@ document.addEventListener("DOMContentLoaded", function(event) {
     },
 
     mounted: function() {
+      if (document.getElementById("app") === null) {
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          $.ajax({
+                  type: 'PATCH',
+                  url: `/users/${gon.current_user.id}.json`,
+                  data: {
+                          latitude: position.coords.latitude,
+                          longitude: position.coords.longitude
+                        },
+                  success: function(result) {
+                                              this.players = JSON.parse(result[0]).sort();
+                                              this.bases = JSON.parse(result[1]);
+                                              this.flags = JSON.parse(result[2]);
+                                              this.currentUser = JSON.parse(result[3]);
+                                            }.bind(this),
+                });
+        }.bind(this), 
+        function(error) {
+          alert(error.message);
+        }
+      );
       setInterval(function() {
+        if (document.getElementById("app") === null) {
+          return;
+        }
         navigator.geolocation.getCurrentPosition(
           function(position) {
             $.ajax({
@@ -52,16 +79,22 @@ document.addEventListener("DOMContentLoaded", function(event) {
         return player.team_id !== this.currentUser.team_id && player.time_stunned === null && this.currentUser.time_stunned === null;
       },
 
-      isAllyBase: function(baseTeamId) {
-        return baseTeamId === this.currentUser.team_id;
+      isAllyBase: function(base) {
+        if (base.distance <= 0.01) {
+          return base.team_id === this.currentUser.team_id;
+        }
       },
 
       isEnemyFlag: function(flag) {
-        return flag.team_id !== this.currentUser.team_id;
+        if (flag.distance <= 0.01) {
+          return flag.team_id !== this.currentUser.team_id;
+        }
       },
 
       isAllyFlag: function(flag) {
-        return flag.team_id === this.currentUser.team_id && flag.captures.length > 0;
+        if (flag.distance <= 0.01) {
+          return flag.team_id === this.currentUser.team_id && flag.captures.length > 0;
+        }
       },
 
       canReturnFlag: function() {
@@ -122,6 +155,26 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                     }.bind(this),
           async: false
         });
+      },
+
+      directionalBearing: function(degrees) {
+        if (degrees >= 337.5 || degrees < 22.5) {
+          return "N";
+        } else if (degrees >= 22.5 && degrees < 67.5) {
+          return "NE";
+        } else if (degrees >= 67.5 && degrees < 112) {
+          return "E";
+        } else if (degrees >= 112 && degrees < 157.5) {
+          return "SE";
+        } else if (degrees >= 157.5 && degrees < 202.5) {
+          return "S";
+        } else if (degrees >= 202.5 && degrees < 247.5) {
+          return "SW";
+        } else if (degrees >= 247.5 && degrees < 292.5) {
+          return "W";
+        } else if (degrees >= 292.5 && degrees < 337.5) {
+          return "NW";
+        }
       }
     },
 

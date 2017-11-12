@@ -1,1 +1,8 @@
-<h1>This is the user's page.</h1>
+<h1><%= @user.name %></h1>
+<h2>Member of the <%= @user.team.name %> Team</h2>
+
+<h4>Points: <%= @user.points %></h4>
+<h4>Team Flags: <%= @user.team.score %></h4>
+<h4>Total Captures: <%= @user.captures.length %></h4>
+<h4>Total Stuns: <%= @user.stunners.length %></h4>
+<h4>Total Times Stunned: <%= @user.stunnees.length %></h4>

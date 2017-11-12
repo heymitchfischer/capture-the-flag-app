@@ -1,8 +1,26 @@
-<h1><a href="/users">User Leaderboard</a>          Team Leaderboard</h1>
-
-<h2>This will list the top teams and their stats.</h2>
-<% @teams.each do |team| %>
-  <div>
-    <h3><%= team.name %> Team: <%= team.score %> Flags</h3>
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <div class="geocontainer-leaderboard">
+        <h1>Team Leaderboard</h1>
+        <% @teams.each do |team| %>
+          <div>
+            <hr>
+            <h3 style="color:<%= team.name %>"><%= team.name %> Team: <%= team.score %> Flags</h3>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-sm">
+      <div class="geocontainer-leaderboard">
+        <h1>Player Leaderboard</h1>
+        <% @players.each do |player| %>
+          <div>
+            <hr>
+            <h3 style="color:<%= player.team.name %>"><%= player.name %>: <%= player.points %></h3>
+          </div>
+        <% end %> 
+      </div>
+    </div>
   </div>
-<% end %>
+</div>

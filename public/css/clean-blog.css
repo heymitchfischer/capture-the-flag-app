@@ -424,3 +424,11 @@ footer {
   overflow: scroll;
   padding: 20px;
 }
+
+.geocontainer-leaderboard {
+  background-color: white;
+  box-shadow: 0 0 0 5px #f4f2ed inset;
+  box-sizing: border-box;
+  padding: 20px;
+  margin: 10px;
+}

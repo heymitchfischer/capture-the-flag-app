@@ -16,22 +16,28 @@
       </div>
       <div class="col-sm">
         <h3>Bases:</h3>
-        <div v-for="base in bases">
-          <h4>{{base.team.name}} Base, {{Math.floor(base.distance * 1609.34)}}m {{directionalBearing(base.bearing)}}</h4>
-          <template v-if="isAllyBase(base)">
-            <button v-if="canReturnFlag()" v-on:click="returnFlag(base.id)">Return Flag</button>
-            <button v-if="canScoreFlag()" v-on:click="returnFlag(base.id)">Score</button> 
-          </template>
+        <div class="geocontainer">
+          <div v-for="base in bases">
+            <h4>{{base.team.name}} Base, {{Math.floor(base.distance * 1609.34)}}m {{directionalBearing(base.bearing)}}</h4>
+            <template v-if="isAllyBase(base)">
+              <button v-if="canReturnFlag()" v-on:click="returnFlag(base.id)">Return Flag</button>
+              <button v-if="canScoreFlag()" v-on:click="returnFlag(base.id)">Score</button> 
+            </template>
+            <hr>
+          </div>
         </div>
       </div>
       <div class="col-sm">
         <h3>Flags:</h3>
-        <div v-for="flag in flags">
-          <h4>{{flag.team.name}} Flag, {{Math.floor(flag.distance * 1609.34)}}m {{directionalBearing(flag.bearing)}}</h4>
-          <template v-if="<%= current_user.time_stunned == nil %>">
-            <button v-if="isEnemyFlag(flag)" v-on:click="capture(flag.id, <%= current_user.id %>)">Capture!</button>
-            <button v-if="isAllyFlag(flag)" v-on:click="capture(flag.id, <%= current_user.id %>)">Rescue!</button>
-          </template>
+        <div class="geocontainer">
+          <div v-for="flag in flags">
+            <h4>{{flag.team.name}} Flag, {{Math.floor(flag.distance * 1609.34)}}m {{directionalBearing(flag.bearing)}}</h4>
+            <template v-if="<%= current_user.time_stunned == nil %>">
+              <button v-if="isEnemyFlag(flag)" v-on:click="capture(flag.id, <%= current_user.id %>)">Capture!</button>
+              <button v-if="isAllyFlag(flag)" v-on:click="capture(flag.id, <%= current_user.id %>)">Rescue!</button>
+            </template>
+            <hr>
+          </div>
         </div>
       </div>
     </div>

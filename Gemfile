@@ -30,6 +30,7 @@ gem 'jquery-rails', '~> 4.3.1'
 gem 'unirest', '~> 1.1.2'
 gem 'gon', '~> 6.1'
 gem 'vuejs-rails'
+gem 'seed_dump'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

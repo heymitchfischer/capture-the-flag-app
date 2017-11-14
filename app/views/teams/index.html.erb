@@ -6,7 +6,8 @@
         <% @teams.each do |team| %>
           <div>
             <hr>
-            <h3><%= team.name %> Team: <%= team.score %> Flags</h3>
+            <h4><span style="color: <%= team.name %>"><%= team.name %> Team:</span> <%= team.score %> Flags</h4>
+            <h5><%= team.users.length %> Players</h5>
           </div>
         <% end %>
       </div>
@@ -17,7 +18,7 @@
         <% @players.each do |player| %>
           <div>
             <hr>
-            <h3><%= player.name %>: <%= player.points %></h3>
+            <h4><%= player.name %>: <%= player.points %></h4>
             <h5 style="color:<%= player.team.name %>"><%= player.team.name %> Team</h5>
           </div>
         <% end %> 

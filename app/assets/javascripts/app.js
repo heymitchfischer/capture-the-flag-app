@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
       players: [],
       bases: [],
       flags: [],
-      currentUser: {}
+      currentUser: {},
+      loading: false
     },
 
     mounted: function() {
@@ -27,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
                                               this.bases = JSON.parse(result[1]);
                                               this.flags = JSON.parse(result[2]);
                                               this.currentUser = JSON.parse(result[3]);
+                                              this.loading = true;
                                             }.bind(this),
                 });
         }.bind(this), 
@@ -174,6 +176,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
           return "W";
         } else if (degrees >= 292.5 && degrees < 337.5) {
           return "NW";
+        }
+      },
+
+      playerStatus: function() {
+        if (this.currentUser.has_flag) {
+          return "Carrying Flag!";
+        } else if (this.currentUser.time_stunned !== null) {
+          return "Stunned";
+        } else {
+          return "Normal";
         }
       }
     },

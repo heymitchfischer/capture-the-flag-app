@@ -1,8 +1,17 @@
-<h1><%= @user.name %></h1>
-<h2>Member of the <%= @user.team.name %> Team</h2>
-
-<h4>Points: <%= @user.points %></h4>
-<h4>Team Flags: <%= @user.team.score %></h4>
-<h4>Total Captures: <%= @user.captures.length %></h4>
-<h4>Total Stuns: <%= @user.stunners.length %></h4>
-<h4>Total Times Stunned: <%= @user.stunnees.length %></h4>
+<div class="container">
+  <div class="geocontainer-leaderboard">
+    <h1>Player Portfolio</h1>
+    <hr>
+    <h3><%= @user.name %>, Member of the <%= @user.team.name %> Team</h3>
+    <hr>
+    <h4>Personal Score: <%= @user.points %></h4>
+    <hr>
+    <h4>Team Score: <%= @user.team.score %></h4>
+    <hr>
+    <h4>Personal Successful Captures: <%= @user.captures.where(success: true).length %>/<%= @user.captures.length %></h4>
+    <hr>
+    <h4>Personal Stuns: <%= @user.stunners.length %></h4>
+    <hr>
+    <h4>Total Times Stunned: <%= @user.stunnees.length %></h4>
+  </div>
+</div>
